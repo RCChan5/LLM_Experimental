@@ -9,4 +9,4 @@ Environment for Researching and Designing LLMs
 3) profit
 
 
-4)ollama implementation?
+4) ollama implementation?
