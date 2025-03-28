@@ -1,0 +1,16 @@
+# Function to find and increment the YYYYMM date
+def increment_embedded_date(s):
+    # Regular expression to find YYYYMM pattern
+    match = re.search(r'(\d{4})(\d{2})', s)
+    if match:
+        year, month = match.groups()
+        try:
+            # Convert to datetime and increment by 1 month
+            date_obj = datetime.strptime(f"{year}{month}", "%Y%m") + relativedelta(months=1)
+            # Format back to YYYYMM
+            new_date = date_obj.strftime("%Y%m")
+            # Replace old date with new one in the string
+            return s.replace(match.group(0), new_date)
+        except ValueError:
+            return s  # If parsing fails, return original string
+    return s  # If no YYYYMM found, return original string
