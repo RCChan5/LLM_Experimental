@@ -22,4 +22,57 @@ def join_dataframes(jobs: pd.DataFrame, config: pd.DataFrame) -> pd.DataFrame:
     full_outer_join_df = jobs.merge(config, how='outer')
     return full_outer_join_df
 
+import paramiko
+
+def ssh_connect(host, port, username, password):
+    """Establishes an SSH connection and returns the client."""
+    try:
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(host, port=port, username=username, password=password)
+        return client
+    except Exception as e:
+        print(f"SSH Connection Error: {e}")
+        return None
+
+def test_ssh_connection(client):
+    """Runs 'ls' to test if the SSH connection is working."""
+    try:
+        stdin, stdout, stderr = client.exec_command("ls")
+        output = stdout.read().decode().strip()
+        if output:
+            print("SSH connection successful. Listing directory contents:")
+            print(output)
+        else:
+            print("SSH connection established, but 'ls' command returned no output.")
+    except Exception as e:
+        print(f"Error running 'ls': {e}")
+
+def check_file_exists(client, file_path):
+    """Checks if a specific file exists on the remote server."""
+    try:
+        stdin, stdout, stderr = client.exec_command(f'test -f "{file_path}" && echo "exists" || echo "not found"')
+        result = stdout.read().decode().strip()
+        return result == "exists"
+    except Exception as e:
+        print(f"Error checking file: {e}")
+        return False
+
+# Example usage
+host = "your.server.com"
+port = 22  # Change if needed
+username = "your_username"
+password = "your_password"
+file_path = "/path/to/your/file.txt"
+
+client = ssh_connect(host, port, username, password)
+if client:
+    test_ssh_connection(client)  # Run 'ls' to verify SSH is working
+    
+    if check_file_exists(client, file_path):
+        print(f"File '{file_path}' exists!")
+    else:
+        print(f"File '{file_path}' does not exist.")
+    
+    client.close()
 
