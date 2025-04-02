@@ -1,4 +1,4 @@
-i9def join_dataframes(jobs: pd.DataFrame, config: pd.DataFrame) -> pd.DataFrame:
+9i9def join_dataframes(jobs: pd.DataFrame, config: pd.DataFrame) -> pd.DataFrame:
     """
     Perform an inner join between jobs and config DataFrames. If the row count
     of the resulting DataFrame matches the row count of the config DataFrame,
@@ -233,3 +233,28 @@ df = pd.DataFrame(data)
 
 print(get_unique_values(df, 'A'))  # Output: [1, 2, 3, 4]
 print(get_unique_values(df, 'B'))  # Output: ['x', 'y', 'z']
+
+
+import pandas as pd
+
+def get_unique_values(df: pd.DataFrame, column: str, append_str: str = ''):
+    """
+    Returns a list of unique values in the specified column of the dataframe,
+    with a given string appended to each value.
+
+    :param df: Pandas DataFrame
+    :param column: Column name as a string
+    :param append_str: String to append to each unique value
+    :return: List of unique values with the string appended
+    """
+    if column in df.columns:
+        return [str(value) + append_str for value in df[column].dropna().unique()]
+    else:
+        raise ValueError(f"Column '{column}' not found in DataFrame")
+
+# Example usage
+data = {'A': [1, 2, 2, 3, 4, 4, None], 'B': ['x', 'y', 'y', 'z', 'x', None, 'z']}
+df = pd.DataFrame(data)
+
+print(get_unique_values(df, 'A', '_num'))  # Output: ['1_num', '2_num', '3_num', '4_num']
+print(get_unique_values(df, 'B', '_str'))  # Output: ['x_str', 'y_str', 'z_str']
