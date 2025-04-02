@@ -76,3 +76,33 @@ if client:
     
     client.close()
 
+
+
+
+
+
+
+import paramiko
+
+def ssh_connect_with_key(host, port, username, key_path):
+    """Establishes an SSH connection using an SSH key."""
+    try:
+        key = paramiko.RSAKey(filename=key_path)
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(host, port=port, username=username, pkey=key)
+        return client
+    except Exception as e:
+        print(f"SSH Connection Error: {e}")
+        return None
+
+# Example usage
+host = "your.server.com"
+port = 22  # Change if needed
+username = "your_username"
+key_path = "/path/to/your/private_key.pem"  # Replace with the actual path to your private key
+
+client = ssh_connect_with_key(host, port, username, key_path)
+if client:
+    print("SSH connection successful!")
+    client.close()
