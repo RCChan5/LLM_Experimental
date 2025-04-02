@@ -106,3 +106,59 @@ client = ssh_connect_with_key(host, port, username, key_path)
 if client:
     print("SSH connection successful!")
     client.close()
+
+
+
+
+
+
+import subprocess
+
+def ssh_command(host, username, command, key_path=None, port=22):
+    """Executes an SSH command using subprocess."""
+    ssh_cmd = ["ssh", "-p", str(port), f"{username}@{host}"]
+    
+    # Use SSH key authentication if a key path is provided
+    if key_path:
+        ssh_cmd.extend(["-i", key_path])
+    
+    ssh_cmd.append(command)
+
+    try:
+        result = subprocess.run(ssh_cmd, capture_output=True, text=True, check=True)
+        return result.stdout.strip()
+    except subprocess.CalledProcessError as e:
+        print(f"SSH Command Error: {e.stderr}")
+        return None
+
+def test_ssh_connection(host, username, key_path=None, port=22):
+    """Tests the SSH connection by listing directory contents."""
+    print("Testing SSH connection...")
+    output = ssh_command(host, username, "ls", key_path, port)
+    if output is not None:
+        print("SSH connection successful. Directory contents:")
+        print(output)
+    else:
+        print("Failed to establish SSH connection.")
+
+def check_file_exists(host, username, file_path, key_path=None, port=22):
+    """Checks if a file exists on the remote server."""
+    command = f'test -f "{file_path}" && echo "exists" || echo "not found"'
+    result = ssh_command(host, username, command, key_path, port)
+    return result == "exists"
+
+# Example usage
+host = "your.server.com"
+port = 22
+username = "your_username"
+key_path = "/path/to/your/private_key.pem"  # Use None if no key file
+file_path = "/path/to/your/file.txt"
+
+# Test SSH connection
+test_ssh_connection(host, username, key_path, port)
+
+# Check if file exists
+if check_file_exists(host, username, file_path, key_path, port):
+    print(f"File '{file_path}' exists!")
+else:
+    print(f"File '{file_path}' does not exist.")
