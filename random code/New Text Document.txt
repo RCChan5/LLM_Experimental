@@ -1,4 +1,4 @@
-def join_dataframes(jobs: pd.DataFrame, config: pd.DataFrame) -> pd.DataFrame:
+i9def join_dataframes(jobs: pd.DataFrame, config: pd.DataFrame) -> pd.DataFrame:
     """
     Perform an inner join between jobs and config DataFrames. If the row count
     of the resulting DataFrame matches the row count of the config DataFrame,
@@ -210,3 +210,26 @@ file_statuses = check_files_exist(host, username, file_paths, key_path, port)
 # Print results
 for file, exists in file_statuses.items():
     print(f"{file}: {'Exists' if exists else 'Does not exist'}")
+
+
+import pandas as pd
+
+def get_unique_values(df: pd.DataFrame, column: str):
+    """
+    Returns a list of unique values in the specified column of the dataframe.
+
+    :param df: Pandas DataFrame
+    :param column: Column name as a string
+    :return: List of unique values
+    """
+    if column in df.columns:
+        return df[column].dropna().unique().tolist()
+    else:
+        raise ValueError(f"Column '{column}' not found in DataFrame")
+
+# Example usage
+data = {'A': [1, 2, 2, 3, 4, 4, None], 'B': ['x', 'y', 'y', 'z', 'x', None, 'z']}
+df = pd.DataFrame(data)
+
+print(get_unique_values(df, 'A'))  # Output: [1, 2, 3, 4]
+print(get_unique_values(df, 'B'))  # Output: ['x', 'y', 'z']
