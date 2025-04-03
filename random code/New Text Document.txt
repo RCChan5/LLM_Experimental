@@ -301,3 +301,29 @@ if st.button("Show/Hide Text Box"):
 if st.session_state.show_textbox:
     user_input = st.text_input("Enter some text:")
     st.write(f"You entered: {user_input}")  # Display user input
+
+
+
+# Initialize session state to track clicks
+if "selected_item" not in st.session_state:
+    st.session_state.selected_item = None
+
+# Define some items and their descriptions
+items = {
+    "Item A": "This is detailed information about Item A.",
+    "Item B": "Here are some insights about Item B.",
+    "Item C": "Item C has additional data displayed here."
+}
+
+# Create buttons for each item
+for item, description in items.items():
+    if st.button(item):
+        st.session_state.selected_item = item  # Store the clicked item
+
+# Display extra info if an item was clicked
+if st.session_state.selected_item:
+    st.text_area(
+        "More Information",
+        items[st.session_state.selected_item],
+        height=100
+    )
