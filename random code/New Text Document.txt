@@ -327,3 +327,30 @@ if st.session_state.selected_item:
         items[st.session_state.selected_item],
         height=100
     )
+
+
+
+
+from datetime import datetime, timedelta
+
+def get_last_n_dates(yyyymm, n):
+    # Convert yyyymm to a date object
+    year = int(yyyymm[:4])
+    month = int(yyyymm[4:])
+    
+    # Get the last day of the month
+    last_day = datetime(year, month, 1) + timedelta(days=32)  # move to next month
+    last_day = datetime(last_day.year, last_day.month, 1) - timedelta(days=1)  # get the last day of the given month
+    
+    # Generate the list of the last n dates
+    dates = []
+    for i in range(n):
+        date = last_day - timedelta(days=i)
+        dates.append(date.strftime('%Y-%m-%d'))  # Format as YYYY-MM-DD
+    
+    return dates
+
+# Example usage
+yyyymm = '202503'
+n = 5
+print(get_last_n_dates(yyyymm, n))
