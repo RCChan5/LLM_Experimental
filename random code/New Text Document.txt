@@ -273,3 +273,13 @@ print(get_unique_values(df, 'B', '_str'))  # Output: ['x_str', 'y_str', 'z_str']
 =======
 print(get_unique_values(df, 'B', '_str'))  # Output: ['x_str', 'y_str', 'z_str']
 >>>>>>> 9b60405eeed1496a61628e198fdd7cfce684a65d
+
+
+
+# Filtering based on conditions
+filtered_result = df.loc[df['B'].eq("bacbl") & df['A'].str.contains("bb", na=False), 'C']
+
+# Extract the first matched value safely
+value = filtered_result.iloc[0] if not filtered_result.empty else None
+
+print(value)  # Output: 20
