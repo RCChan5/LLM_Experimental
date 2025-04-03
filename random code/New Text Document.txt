@@ -1,15 +1,23 @@
+from datetime import datetime, timedelta
+import calendar
 
-def extract_date_from_string(input_string):
-    # Use regex to find any date in the format YYYYMM (8 digits)
-    match = re.search(r'\d{6}', input_string)
+def get_last_n_months(yyyymm, n):
+    # Convert yyyymm to a date object
+    year = int(yyyymm[:4])
+    month = int(yyyymm[4:])
     
-    if match:
-        date_str = match.group()
-        # Convert to a date object to ensure it's valid
-        try:
-            date = datetime.strptime(date_str, '%Y%m')
-            return date.strftime('%Y%m')
-        except ValueError:
-            return "Invalid date format in string"
-    else:
-        return "No valid date found"
+    months = []
+    
+    for i in range(n):
+        # Calculate the month and year for the i-th previous month
+        new_month = month - i
+        new_year = year
+        
+        if new_month <= 0:
+            new_month += 12
+            new_year -= 1
+        
+        # Format the date in YYYYMM format
+        months.append(f'{new_year:04d}{new_month:02d}')
+    
+    return months
