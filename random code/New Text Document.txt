@@ -1,4 +1,4 @@
-def join_dataframes(jobs: pd.DataFrame, config: pd.DataFrame) -> pd.DataFrame:
+9i9def join_dataframes(jobs: pd.DataFrame, config: pd.DataFrame) -> pd.DataFrame:
     """
     Perform an inner join between jobs and config DataFrames. If the row count
     of the resulting DataFrame matches the row count of the config DataFrame,
@@ -162,3 +162,107 @@ if check_file_exists(host, username, file_path, key_path, port):
     print(f"File '{file_path}' exists!")
 else:
     print(f"File '{file_path}' does not exist.")
+<<<<<<< HEAD
+# Filtering based on conditions
+filtered_result = df.loc[df['B'].eq("bacbl") & df['A'].str.contains("bb", na=False), 'C']
+
+# Extract the first matched value safely
+value = filtered_result.iloc[0] if not filtered_result.empty else None
+=======
+
+
+import subprocess
+
+def ssh_command(host, username, command, key_path=None, port=22):
+    """Executes an SSH command using subprocess."""
+    ssh_cmd = ["ssh", "-p", str(port), f"{username}@{host}"]
+    
+    if key_path:
+        ssh_cmd.extend(["-i", key_path])
+    
+    ssh_cmd.append(command)
+
+    try:
+        result = subprocess.run(ssh_cmd, capture_output=True, text=True, check=True)
+        return result.stdout.strip()
+    except subprocess.CalledProcessError as e:
+        print(f"SSH Command Error: {e.stderr}")
+        return None
+
+def check_files_exist(host, username, file_paths, key_path=None, port=22):
+    """Checks if multiple files exist on the remote server."""
+    results = {}
+
+    for file_path in file_paths:
+        command = f'test -f "{file_path}" && echo "exists" || echo "not found"'
+        result = ssh_command(host, username, command, key_path, port)
+        results[file_path] = (result == "exists")
+
+    return results
+
+# Example usage
+host = "your.server.com"
+port = 22
+username = "your_username"
+key_path = "/path/to/your/private_key.pem"  # Use None if no key file
+file_paths = [
+    "/path/to/file1.txt",
+    "/path/to/file2.log",
+    "/home/user/script.py"
+]
+
+# Check multiple files
+file_statuses = check_files_exist(host, username, file_paths, key_path, port)
+
+# Print results
+for file, exists in file_statuses.items():
+    print(f"{file}: {'Exists' if exists else 'Does not exist'}")
+
+
+import pandas as pd
+
+def get_unique_values(df: pd.DataFrame, column: str):
+    """
+    Returns a list of unique values in the specified column of the dataframe.
+
+    :param df: Pandas DataFrame
+    :param column: Column name as a string
+    :return: List of unique values
+    """
+    if column in df.columns:
+        return df[column].dropna().unique().tolist()
+    else:
+        raise ValueError(f"Column '{column}' not found in DataFrame")
+
+# Example usage
+data = {'A': [1, 2, 2, 3, 4, 4, None], 'B': ['x', 'y', 'y', 'z', 'x', None, 'z']}
+df = pd.DataFrame(data)
+
+print(get_unique_values(df, 'A'))  # Output: [1, 2, 3, 4]
+print(get_unique_values(df, 'B'))  # Output: ['x', 'y', 'z']
+
+
+import pandas as pd
+
+def get_unique_values(df: pd.DataFrame, column: str, append_str: str = ''):
+    """
+    Returns a list of unique values in the specified column of the dataframe,
+    with a given string appended to each value.
+
+    :param df: Pandas DataFrame
+    :param column: Column name as a string
+    :param append_str: String to append to each unique value
+    :return: List of unique values with the string appended
+    """
+    if column in df.columns:
+        return [str(value) + append_str for value in df[column].dropna().unique()]
+    else:
+        raise ValueError(f"Column '{column}' not found in DataFrame")
+
+# Example usage
+data = {'A': [1, 2, 2, 3, 4, 4, None], 'B': ['x', 'y', 'y', 'z', 'x', None, 'z']}
+df = pd.DataFrame(data)
+
+print(get_unique_values(df, 'A', '_num'))  # Output: ['1_num', '2_num', '3_num', '4_num']
+print(get_unique_values(df, 'B', '_str'))  # Output: ['x_str', 'y_str', 'z_str']
+>>>>>>> 9b60405eeed1496a61628e198fdd7cfce684a65d
