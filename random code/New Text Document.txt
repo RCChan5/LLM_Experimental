@@ -1,16 +1,15 @@
-def get_last_n_dates(yyyymm, n):
-    # Convert yyyymm to a date object
-    year = int(yyyymm[:4])
-    month = int(yyyymm[4:])
+
+def extract_date_from_string(input_string):
+    # Use regex to find any date in the format YYYYMM (8 digits)
+    match = re.search(r'\d{6}', input_string)
     
-    # Get the last day of the month
-    last_day = datetime(year, month, 1) + timedelta(days=32)  # move to next month
-    last_day = datetime(last_day.year, last_day.month, 1) - timedelta(days=1)  # get the last day of the given month
-    
-    # Generate the list of the last n dates in yyyymm format
-    dates = []
-    for i in range(n):
-        date = last_day - timedelta(days=i)
-        dates.append(date.strftime('%Y%m'))  # Format as YYYYMM
-    
-    return dates
+    if match:
+        date_str = match.group()
+        # Convert to a date object to ensure it's valid
+        try:
+            date = datetime.strptime(date_str, '%Y%m')
+            return date.strftime('%Y%m')
+        except ValueError:
+            return "Invalid date format in string"
+    else:
+        return "No valid date found"
