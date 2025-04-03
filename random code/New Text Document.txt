@@ -283,3 +283,21 @@ filtered_result = df.loc[df['B'].eq("bacbl") & df['A'].str.contains("bb", na=Fal
 value = filtered_result.iloc[0] if not filtered_result.empty else None
 
 print(value)  # Output: 20
+
+
+
+
+
+
+# Initialize session state for toggling the text box
+if "show_textbox" not in st.session_state:
+    st.session_state.show_textbox = False
+
+# Button to toggle the text box visibility
+if st.button("Show/Hide Text Box"):
+    st.session_state.show_textbox = not st.session_state.show_textbox  # Toggle state
+
+# Display text box if the button was clicked
+if st.session_state.show_textbox:
+    user_input = st.text_input("Enter some text:")
+    st.write(f"You entered: {user_input}")  # Display user input
