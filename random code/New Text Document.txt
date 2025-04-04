@@ -1,23 +1,20 @@
-from datetime import datetime, timedelta
-import calendar
+import streamlit as st
 
-def get_last_n_months(yyyymm, n):
-    # Convert yyyymm to a date object
-    year = int(yyyymm[:4])
-    month = int(yyyymm[4:])
+# Sidebar input section
+st.sidebar.header("User Input")
+input_1 = st.sidebar.text_input("Enter first input:")
+input_2 = st.sidebar.number_input("Enter second input:", min_value=0, max_value=100)
+input_3 = st.sidebar.selectbox("Choose third input:", ["Option 1", "Option 2", "Option 3"])
+
+# Button to trigger the process
+if st.sidebar.button("Start Process"):
+    # This is where the main logic/process will happen
+    st.sidebar.write("Process started with the following inputs:")
+    st.sidebar.write(f"Input 1: {input_1}")
+    st.sidebar.write(f"Input 2: {input_2}")
+    st.sidebar.write(f"Input 3: {input_3}")
     
-    months = []
-    
-    for i in range(n):
-        # Calculate the month and year for the i-th previous month
-        new_month = month - i
-        new_year = year
-        
-        if new_month <= 0:
-            new_month += 12
-            new_year -= 1
-        
-        # Format the date in YYYYMM format
-        months.append(f'{new_year:04d}{new_month:02d}')
-    
-    return months
+    # Here you can add whatever process you want to run after the button is clicked
+    st.write(f"Processing {input_1}, {input_2}, and {input_3}...")
+    # Example of a mock process (e.g., a simple delay)
+    st.write("Processing completed!")
