@@ -1,4 +1,4 @@
-import streamlit as st
+6import streamlit as st
 
 # Sidebar input section
 st.sidebar.header("User Input")
@@ -18,3 +18,27 @@ if st.sidebar.button("Start Process"):
     st.write(f"Processing {input_1}, {input_2}, and {input_3}...")
     # Example of a mock process (e.g., a simple delay)
     st.write("Processing completed!")
+
+import os
+
+def get_unique_files_in_config():
+    config_path = os.path.join(os.getcwd(), 'config')
+    if not os.path.isdir(config_path):
+        raise FileNotFoundError(f"No 'config' folder found in {os.getcwd()}")
+
+    unique_files = set()
+    file_paths = []
+
+    for root, _, files in os.walk(config_path):
+        for file in files:
+            if file not in unique_files:
+                unique_files.add(file)
+                file_paths.append(os.path.join(root, file))
+
+    return file_paths
+
+# Example usage:
+if __name__ == "__main__":
+    unique_file_paths = get_unique_files_in_config()
+    for path in unique_file_paths:
+        print(path)
