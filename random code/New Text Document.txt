@@ -42,3 +42,29 @@ if __name__ == "__main__":
     unique_file_paths = get_unique_files_in_config()
     for path in unique_file_paths:
         print(path)
+
+
+from scipy.stats import ttest_ind, mannwhitneyu, ks_2samp
+
+# Extract predictions
+preds1 = df1['pred']
+preds2 = df2['pred']
+
+# Welch's t-test (assumes unequal variance)
+t_stat, t_p = ttest_ind(preds1, preds2, equal_var=False)
+
+# Mann–Whitney U test (non-parametric, for differences in medians/ranks)
+u_stat, u_p = mannwhitneyu(preds1, preds2, alternative='two-sided')
+
+# Kolmogorov–Smirnov test (compares entire distributions)
+ks_stat, ks_p = ks_2samp(preds1, preds2)
+
+# Print results
+print("Welch’s t-test:")
+print(f"  t-statistic = {t_stat:.4f}, p-value = {t_p:.4f}")
+
+print("\nMann–Whitney U test:")
+print(f"  U-statistic = {u_stat:.4f}, p-value = {u_p:.4f}")
+
+print("\nKolmogorov–Smirnov test:")
+print(f"  KS-statistic = {ks_stat:.4f}, p-value = {ks_p:.4f}")
