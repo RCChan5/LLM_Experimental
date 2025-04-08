@@ -1,4 +1,4 @@
-6import streamlit as st
+96import streamlit as st
 
 # Sidebar input section
 st.sidebar.header("User Input")
@@ -68,3 +68,18 @@ print(f"  U-statistic = {u_stat:.4f}, p-value = {u_p:.4f}")
 
 print("\nKolmogorov–Smirnov test:")
 print(f"  KS-statistic = {ks_stat:.4f}, p-value = {ks_p:.4f}")
+
+
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+def increment_month(yyyymm):
+    # Convert to string and parse as date
+    yyyymm = str(yyyymm)
+    dt = datetime.strptime(yyyymm, "%Y%m")
+    
+    # Add one month
+    next_month = dt + relativedelta(months=1)
+    
+    # Return in YYYYMM format
+    return next_month.strftime("%Y%m")
