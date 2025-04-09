@@ -103,3 +103,20 @@ df[cols_to_convert] = df[cols_to_convert].astype(float)
 
 print(df.dtypes)
 print(df)
+
+import pandas as pd
+
+# Example DataFrame
+df = pd.DataFrame({
+    'a': [1.0, 2.0, 3.0],
+    'b': [4.0, 5.0, 6.0],
+    'c': ['x', 'y', 'z']  # non-float column
+})
+
+# Select float columns
+float_cols = df.select_dtypes(include='float')
+
+# Sum them and return as a one-row DataFrame
+sum_df = pd.DataFrame([float_cols.sum()], columns=float_cols.columns)
+
+print(sum_df)
