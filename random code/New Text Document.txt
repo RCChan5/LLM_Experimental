@@ -83,3 +83,23 @@ def increment_month(yyyymm):
     
     # Return in YYYYMM format
     return next_month.strftime("%Y%m")
+
+import pandas as pd
+
+# Sample DataFrame
+df = pd.DataFrame({
+    'a': ['1', '2', '3'],
+    'b': ['4', '5', '6'],
+    'c': ['7', '8', '9'],
+    'd': ['10', '11', '12'],
+    'e': ['x', 'y', 'z']  # last column (exclude this)
+})
+
+# Get columns from index 2 (third column) up to but not including the last column
+cols_to_convert = df.columns[2:-1]
+
+# Convert those columns to float
+df[cols_to_convert] = df[cols_to_convert].astype(float)
+
+print(df.dtypes)
+print(df)
