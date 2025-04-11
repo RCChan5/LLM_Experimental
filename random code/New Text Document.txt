@@ -1,122 +1,12 @@
-96import streamlit as st
-
-# Sidebar input section
-st.sidebar.header("User Input")
-input_1 = st.sidebar.text_input("Enter first input:")
-input_2 = st.sidebar.number_input("Enter second input:", min_value=0, max_value=100)
-input_3 = st.sidebar.selectbox("Choose third input:", ["Option 1", "Option 2", "Option 3"])
-
-# Button to trigger the process
-if st.sidebar.button("Start Process"):
-    # This is where the main logic/process will happen
-    st.sidebar.write("Process started with the following inputs:")
-    st.sidebar.write(f"Input 1: {input_1}")
-    st.sidebar.write(f"Input 2: {input_2}")
-    st.sidebar.write(f"Input 3: {input_3}")
-    
-    # Here you can add whatever process you want to run after the button is clicked
-    st.write(f"Processing {input_1}, {input_2}, and {input_3}...")
-    # Example of a mock process (e.g., a simple delay)
-    st.write("Processing completed!")
-
-import os
-
-def get_unique_files_in_config():
-    config_path = os.path.join(os.getcwd(), 'config')
-    if not os.path.isdir(config_path):
-        raise FileNotFoundError(f"No 'config' folder found in {os.getcwd()}")
-
-    unique_files = set()
-    file_paths = []
-
-    for root, _, files in os.walk(config_path):
-        for file in files:
-            if file not in unique_files:
-                unique_files.add(file)
-                file_paths.append(os.path.join(root, file))
-
-    return file_paths
-
-# Example usage:
-if __name__ == "__main__":
-    unique_file_paths = get_unique_files_in_config()
-    for path in unique_file_paths:
-        print(path)
-
-
-from scipy.stats import ttest_ind, mannwhitneyu, ks_2samp
-
-# Extract predictions
-preds1 = df1['pred']
-preds2 = df2['pred']
-
-# Welch's t-test (assumes unequal variance)
-t_stat, t_p = ttest_ind(preds1, preds2, equal_var=False)
-
-# Mann–Whitney U test (non-parametric, for differences in medians/ranks)
-u_stat, u_p = mannwhitneyu(preds1, preds2, alternative='two-sided')
-
-# Kolmogorov–Smirnov test (compares entire distributions)
-ks_stat, ks_p = ks_2samp(preds1, preds2)
-
-# Print results
-print("Welch’s t-test:")
-print(f"  t-statistic = {t_stat:.4f}, p-value = {t_p:.4f}")
-
-print("\nMann–Whitney U test:")
-print(f"  U-statistic = {u_stat:.4f}, p-value = {u_p:.4f}")
-
-print("\nKolmogorov–Smirnov test:")
-print(f"  KS-statistic = {ks_stat:.4f}, p-value = {ks_p:.4f}")
-
-
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-
-def increment_month(yyyymm):
-    # Convert to string and parse as date
-    yyyymm = str(yyyymm)
-    dt = datetime.strptime(yyyymm, "%Y%m")
-    
-    # Add one month
-    next_month = dt + relativedelta(months=1)
-    
-    # Return in YYYYMM format
-    return next_month.strftime("%Y%m")
-
 import pandas as pd
 
 # Sample DataFrame
 df = pd.DataFrame({
-    'a': ['1', '2', '3'],
-    'b': ['4', '5', '6'],
-    'c': ['7', '8', '9'],
-    'd': ['10', '11', '12'],
-    'e': ['x', 'y', 'z']  # last column (exclude this)
+    'a': ['specific string', 'other', 'specific string'],
+    'value': [10.5, 20.0, 5.5]
 })
 
-# Get columns from index 2 (third column) up to but not including the last column
-cols_to_convert = df.columns[2:-1]
+# Filter and sum
+total = df[df['a'] == 'specific string']['value'].sum()
 
-# Convert those columns to float
-df[cols_to_convert] = df[cols_to_convert].astype(float)
-
-print(df.dtypes)
-print(df)
-
-import pandas as pd
-
-# Example DataFrame
-df = pd.DataFrame({
-    'a': [1.0, 2.0, 3.0],
-    'b': [4.0, 5.0, 6.0],
-    'c': ['x', 'y', 'z']  # non-float column
-})
-
-# Select float columns
-float_cols = df.select_dtypes(include='float')
-
-# Sum them and return as a one-row DataFrame
-sum_df = pd.DataFrame([float_cols.sum()], columns=float_cols.columns)
-
-print(sum_df)
+print(total)
