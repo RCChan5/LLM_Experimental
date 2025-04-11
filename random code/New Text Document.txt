@@ -1,12 +1,7 @@
-import pandas as pd
+# Filter rows
+filtered = df[df['a'] == 'specific string']
 
-# Sample DataFrame
-df = pd.DataFrame({
-    'a': ['specific string', 'other', 'specific string'],
-    'value': [10.5, 20.0, 5.5]
-})
-
-# Filter and sum
-total = df[df['a'] == 'specific string']['value'].sum()
+# Select float columns and sum
+total = filtered.select_dtypes(include='float').sum()
 
 print(total)
