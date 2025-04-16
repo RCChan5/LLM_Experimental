@@ -5,3 +5,14 @@ filtered = df[df['a'] == 'specific string']
 total = filtered.select_dtypes(include='float').sum()
 
 print(total)
+
+import pandas as pd
+
+# Example DataFrame
+df = pd.DataFrame({
+    'col1': ['abc', 'bbq', 'xyz', 'abba']
+})
+
+# Check if the value in 'col1' at row index 1 contains "bb"
+contains_bb = "bb" in df.loc[1, 'col1']
+print(contains_bb)
