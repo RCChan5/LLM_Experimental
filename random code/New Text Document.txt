@@ -1,18 +1,14 @@
-# Filter rows
-filtered = df[df['a'] == 'specific string']
-
-# Select float columns and sum
-total = filtered.select_dtypes(include='float').sum()
-
-print(total)
-
 import pandas as pd
+from openpyxl import load_workbook
 
-# Example DataFrame
-df = pd.DataFrame({
-    'col1': ['abc', 'bbq', 'xyz', 'abba']
-})
+# Load your existing workbook
+filename = "your_excel_file.xlsx"
+book = load_workbook(filename)
 
-# Check if the value in 'col1' at row index 1 contains "bb"
-contains_bb = "bb" in df.loc[1, 'col1']
-print(contains_bb)
+# Load your DataFrame
+df = pd.read_csv("your_data.csv")  # or however you have it
+
+# Use ExcelWriter in append mode
+with pd.ExcelWriter(filename, engine="openpyxl", mode="a", if_sheet_exists="replace") as writer:
+    writer.book = book
+    df.to_excel(writer, sheet_name="Sheet1", index=False)
