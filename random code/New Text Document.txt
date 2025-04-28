@@ -12,3 +12,10 @@ df = pd.read_csv("your_data.csv")  # or however you have it
 with pd.ExcelWriter(filename, engine="openpyxl", mode="a", if_sheet_exists="replace") as writer:
     writer.book = book
     df.to_excel(writer, sheet_name="Sheet1", index=False)
+
+
+def get_previous_value(current_value):
+    pattern = ['012', '048', '084', '012']  # your 4-month cycle
+    try:
+        index = pattern.index(current_value)
+        previous_index = (
